@@ -51,13 +51,14 @@ def room():
 def connect(auth):
     user = session["name"]
     room = session["room"]
-    usr_id = len(rooms[room]["members"]+1)
+    usr_id = len(rooms[room]["members"])+1
     session["usr-id"] = usr_id
     join_room(room)
     user_data = {"usr-id": usr_id, "user":user}
     rooms[room]["members"].append(user_data)
-    content = f"{user} has joined the room. Have fun!"
-    send({"msg":content, "usr-list": rooms[room]["members"]}, to=room)
+    content = "has joined the room. Have fun!"
+    send({"msg":content, "usr":user, "usr-list": rooms[room]["members"]}, to=room)
+    print(f"User {user} has connected to room {room}.")
 @socketio.on("disconnect")
 def disconnect():
     user = session["name"]
@@ -65,8 +66,11 @@ def disconnect():
     usr_id = session["usr-id"]
     leave_room(room)
     del rooms[room]["members"][usr_id]
+    if len(rooms[room]["members"]) <= 0:
+        del rooms[room]
     content = f"{user} has left the room. Shame on them!"
     send({"msg":content, "usr-list":rooms[room]["members"]}, to=room)
+    print(f"User {user} has disconnected from room {room}.")
     # TODO check python code for problems and figure out the javascript side
 
 if __name__ == "__main__":

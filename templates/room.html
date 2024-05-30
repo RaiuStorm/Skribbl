@@ -18,7 +18,7 @@
     <div class="board-area">
     </div>
     <div class="msg-area">
-        <div class="msg-display"></div>
+        <div class="msg-display" id="msg-display"></div>
         <div class="msg-box">
             <form>
                 <input type="text" placeholder="Guess!" name="guess">
@@ -27,5 +27,24 @@
         </div>
     </div>
 </main>
-<script></script>
+<script>
+    var socket = io();
+    var msgBox = document.getElementById("msg-display");
+    function createMessage(usr, msg) {
+        var msgBlock = document.createElement("div");
+        msgBlock.classList.add("msg-block");
+        var msgSpan = document.createElement("span");
+        var userBold = document.createElement("STRONG");
+        var usrText = document.createTextNode(`${usr}: `);
+        userBold.appendChild(usrText);
+        msgSpan.appendChild(userBold);  
+        msgText = document.createTextNode(`${msg}`);
+        msgSpan.appendChild(msgText);
+        msgBlock.appendChild(msgSpan);
+        msgBox.appendChild(msgBlock);
+    }
+    socket.on("message", (data) => {
+        createMessage(data.usr, data.msg);
+    });
+</script>
 {% endblock %}
