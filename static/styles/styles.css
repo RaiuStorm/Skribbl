@@ -1,0 +1,98 @@
+* {
+    box-sizing: border-box;
+}
+html, body {
+    height: 100%;
+}
+body {
+    background-color: rgb(18, 18, 18);
+    margin: 0;
+}
+.toast {
+    overflow: visible;
+}
+.content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+h1, label, p, small {
+    color: rgb(255,255,255);
+}
+.title {
+    text-align: center;
+}
+.container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.user-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.join {
+    display: flex;
+    flex-direction: row;
+}
+.create {
+    width: 100%;
+}
+
+.room-nav {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 30px;
+}
+.guess-parent {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.guess {
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
+}
+.guess p {
+    text-align: center;
+}
+.main-body {
+    display: flex;
+    height: 70vh;
+    gap: 10px;
+}
+.player-list {
+    width: 250px;
+    max-height: fit-content;
+    background-color: whitesmoke;
+}
+.player-list ul {
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+.board-area {
+    /* border: 2px solid whitesmoke; */
+    background-color: whitesmoke;
+    flex: 1;
+}
+.msg-area {
+    border: 2px solid whitesmoke;
+    flex: 0.5;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+.msg-display {
+    background-color: rgb(215, 215, 215);
+    border-bottom: 2px solid rgb(245, 245, 245);
+    flex: 1;
+}
+.msg-box input {
+    width: 100%;
+}

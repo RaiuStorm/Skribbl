@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<nav class="room-nav">
+    <p>Room code: {{room}}</p>
+    <div class="guess-parent">
+        <div class="guess">
+            <small>GUESS THIS</small>
+            <p class="secret-word">secret</p>
+        </div>
+    </div>
+</nav>
+<main class="main-body">
+    <div class="player-list">
+        <ul>
+            <li>Tom</li>
+        </ul>
+    </div>
+    <div class="board-area">
+    </div>
+    <div class="msg-area">
+        <div class="msg-display"></div>
+        <div class="msg-box">
+            <form>
+                <input type="text" placeholder="Guess!" name="guess">
+                <input type="submit" hidden>
+            </form>
+        </div>
+    </div>
+</main>
+{% endblock %}
