@@ -20,17 +20,15 @@
     <div class="msg-area">
         <div class="msg-display" id="msg-display"></div>
         <div class="msg-box">
-            <form>
-                <input type="text" placeholder="Guess!" name="guess">
-                <input type="submit" hidden>
-            </form>
+            <input type="text" placeholder="Guess!" name="guess" id="usr-input">
+            <button type="submit" id="submit-btn" hidden>
         </div>
     </div>
 </main>
 <script>
     var socket = io();
-    var msgBox = document.getElementById("msg-display");
     function createMessage(usr, msg) {
+        var msgBox = document.getElementById("msg-display");
         var msgBlock = document.createElement("div");
         msgBlock.classList.add("msg-block");
         var msgSpan = document.createElement("span");
@@ -43,8 +41,18 @@
         msgBlock.appendChild(msgSpan);
         msgBox.appendChild(msgBlock);
     }
+    var submitBtn = document.getElementById("submit-btn");
+    var usrInput = document.getElementById("usr-input");
+    usrInput.addEventListener("keyup", (event) => {
+        event.preventDefault();
+        if (event.keyCode === 13) {
+            socket.emit("message", {"msg": usrInput.value});
+            usrInput.value = "";
+        }
+    });
     socket.on("message", (data) => {
         createMessage(data.usr, data.msg);
+        console.log(data.msg);
     });
 </script>
 {% endblock %}

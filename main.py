@@ -42,15 +42,15 @@ def home():
 
 @app.route("/room")
 def room():
-    user = session["name"]
-    room = session["room"]
+    user = session.get("name")
+    room = session.get("room")
     if room not in rooms or not user:
         return redirect(url_for("home"))
     return render_template("room.html", room=room)
 @socketio.on("connect")
 def connect(auth):
-    user = session["name"]
-    room = session["room"]
+    user = session.get("name")
+    room = session.get("room")
     usr_id = len(rooms[room]["members"])+1
     session["usr-id"] = usr_id
     join_room(room)
@@ -61,17 +61,24 @@ def connect(auth):
     print(f"User {user} has connected to room {room}.")
 @socketio.on("disconnect")
 def disconnect():
-    user = session["name"]
-    room = session["room"]
-    usr_id = session["usr-id"]
+    user = session.get("name")
+    room = session.get("room")
+    usr_id = session.get("usr-id")
     leave_room(room)
-    del rooms[room]["members"][usr_id]
-    if len(rooms[room]["members"]) <= 0:
-        del rooms[room]
+    if room in rooms:
+        del rooms[room]["members"][usr_id]
+        if len(rooms[room]["members"]) <= 0:
+            del rooms[room]
     content = f"{user} has left the room. Shame on them!"
     send({"msg":content, "usr-list":rooms[room]["members"]}, to=room)
     print(f"User {user} has disconnected from room {room}.")
-    # TODO check python code for problems and figure out the javascript side
+
+@socketio.on("message")
+def send_msg(data):
+    user = session.get("name")
+    room = session.get("room")
+    send({"msg":data["msg"], "usr":user}, to=room)
+    rooms[room]["messages"].append(data["msg"])
 
 if __name__ == "__main__":
     socketio.run(app, debug=True)
