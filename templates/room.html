@@ -14,6 +14,7 @@
         <div id="player-list"></div>
     </div>
     <div class="board-area">
+        <canvas></canvas>
     </div>
     <div class="msg-area">
         <div class="msg-display" id="msg-display"></div>
@@ -25,6 +26,10 @@
 </main>
 <script>
     var socket = io();
+    const canvas = document.querySelector("canvas");
+    const ctx = canvas.getContext("2d");
+    
+
     function createMessage(usr, msg) {
         let msgBox = document.getElementById("msg-display");
         let msgBlock = document.createElement("div");
