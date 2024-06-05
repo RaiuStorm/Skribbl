@@ -52,7 +52,6 @@
     });
     socket.on("message", (data) => {
         createMessage(data.usr, data.msg);
-        console.log(data.msg);
     });
 </script>
 {% endblock %}

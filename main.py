@@ -51,7 +51,7 @@ def room():
 def connect(auth):
     user = session.get("name")
     room = session.get("room")
-    usr_id = len(rooms[room]["members"])+1
+    usr_id = len(rooms[room]["members"])
     session["usr-id"] = usr_id
     join_room(room)
     user_data = {"usr-id": usr_id, "user":user}
@@ -69,6 +69,7 @@ def disconnect():
         del rooms[room]["members"][usr_id]
         if len(rooms[room]["members"]) <= 0:
             del rooms[room]
+            return
     content = f"{user} has left the room. Shame on them!"
     send({"msg":content, "usr-list":rooms[room]["members"]}, to=room)
     print(f"User {user} has disconnected from room {room}.")
