@@ -67,15 +67,27 @@ h1, label, p, small {
     height: 70vh;
     gap: 10px;
 }
-.player-list {
+.player-area {
     width: 250px;
     max-height: fit-content;
     background-color: whitesmoke;
 }
-.player-list ul {
-    overflow-x: hidden;
+#player-list {
     overflow-y: scroll;
 }
+#player-list p {
+    color: black;
+}
+.player {
+    
+}
+.player-info {
+    text-align: center;
+}
+.player-info .player-name {
+    font-weight: bold;
+}
+
 .board-area {
     /* border: 2px solid whitesmoke; */
     background-color: whitesmoke;

@@ -10,10 +10,8 @@
     </div>
 </nav>
 <main class="main-body">
-    <div class="player-list">
-        <ul>
-            <li>Tom</li>
-        </ul>
+    <div class="player-area">
+        <div id="player-list"></div>
     </div>
     <div class="board-area">
     </div>
@@ -28,12 +26,12 @@
 <script>
     var socket = io();
     function createMessage(usr, msg) {
-        var msgBox = document.getElementById("msg-display");
-        var msgBlock = document.createElement("div");
+        let msgBox = document.getElementById("msg-display");
+        let msgBlock = document.createElement("div");
         msgBlock.classList.add("msg-block");
-        var msgSpan = document.createElement("span");
-        var userBold = document.createElement("STRONG");
-        var usrText = document.createTextNode(`${usr}: `);
+        let msgSpan = document.createElement("span");
+        let userBold = document.createElement("STRONG");
+        let usrText = document.createTextNode(`${usr}: `);
         userBold.appendChild(usrText);
         msgSpan.appendChild(userBold);  
         msgText = document.createTextNode(`${msg}`);
@@ -41,8 +39,21 @@
         msgBlock.appendChild(msgSpan);
         msgBox.appendChild(msgBlock);
     }
-    var submitBtn = document.getElementById("submit-btn");
-    var usrInput = document.getElementById("usr-input");
+    function createUser(usr) {
+        let playerList = document.getElementById("player-list");
+        let playerDiv = document.createElement("div");
+        playerDiv.classList.add("player");
+        let playerInfo = document.createElement("div");
+        playerInfo.classList.add("player-info");
+        let playerName = document.createElement("p");
+        playerName.textContent = usr;
+        playerName.classList.add("player-name");
+        playerInfo.appendChild(playerName);
+        playerDiv.appendChild(playerInfo);
+        playerList.appendChild(playerDiv);
+    }
+    let submitBtn = document.getElementById("submit-btn");
+    let usrInput = document.getElementById("usr-input");
     usrInput.addEventListener("keyup", (event) => {
         event.preventDefault();
         if (event.keyCode === 13) {
@@ -52,6 +63,11 @@
     });
     socket.on("message", (data) => {
         createMessage(data.usr, data.msg);
+        if (typeof data.usrList !== "undefined" || data.usrList !== null) {
+            data.usrList.forEach((currentValue) => {
+                createUser(currentValue.user);
+            });
+        }
     });
 </script>
 {% endblock %}

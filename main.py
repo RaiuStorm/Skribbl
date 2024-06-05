@@ -34,7 +34,7 @@ def home():
             return render_template("home.html", error="Room does not exist")
         elif create != False:
             room = generate_code(4)
-            rooms[room] = {"members":[], "messages":[]} # members will be [{"usr-id":"AAAA", "usr":"username"}] for security reasons yo
+            rooms[room] = {"members":[], "messages":[]} # members will be [{"usr-id":0", "usr":"username"}] for security reasons yo
         session["name"] = user
         session["room"] = room
         return redirect(url_for("room"))
@@ -57,7 +57,7 @@ def connect(auth):
     user_data = {"usr-id": usr_id, "user":user}
     rooms[room]["members"].append(user_data)
     content = "has joined the room. Have fun!"
-    send({"msg":content, "usr":user, "usr-list": rooms[room]["members"]}, to=room)
+    send({"msg":content, "usr":user, "usrList": rooms[room]["members"]}, to=room)
     print(f"User {user} has connected to room {room}.")
 @socketio.on("disconnect")
 def disconnect():
@@ -71,7 +71,7 @@ def disconnect():
             del rooms[room]
             return
     content = f"{user} has left the room. Shame on them!"
-    send({"msg":content, "usr-list":rooms[room]["members"]}, to=room)
+    send({"msg":content, "usr":user, "usrList":rooms[room]["members"]}, to=room)
     print(f"User {user} has disconnected from room {room}.")
 
 @socketio.on("message")
