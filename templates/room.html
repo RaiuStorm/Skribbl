@@ -28,8 +28,28 @@
     var socket = io();
     const canvas = document.querySelector("canvas");
     const ctx = canvas.getContext("2d");
-    
+    let isDrawing = false;
+    window.addEventListener("load", () => {
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+    });
+    const startDrawing = () => {
+        isDrawing = true;
+        ctx.beginPath();
+        ctx.lineWidth = 2;
+    }
+    const draw = (e) => {
+        if (!isDrawing) return;
+        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.stroke();
+    }
 
+    canvas.addEventListener("mousedown", startDrawing);
+    canvas.addEventListener("mousemove", draw);
+    canvas.addEventListener("mouseup", () => {
+        isDrawing = false;
+    });
+    
     function createMessage(usr, msg) {
         let msgBox = document.getElementById("msg-display");
         let msgBlock = document.createElement("div");
@@ -68,7 +88,7 @@
     });
     socket.on("message", (data) => {
         createMessage(data.usr, data.msg);
-        if (typeof data.usrList !== "undefined" || data.usrList !== null) {
+        if (typeof data.usrList !== "undefined") {
             data.usrList.forEach((currentValue) => {
                 createUser(currentValue.user);
             });
