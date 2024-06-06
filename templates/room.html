@@ -15,6 +15,19 @@
     </div>
     <div class="board-area">
         <canvas></canvas>
+        <div class="tools">
+            <button id="delete">DEL</button>
+            <div class="colors">
+                <ul class="options">
+                    <li class="option"></li>
+                    <li class="option"></li>
+                    <li class="option"></li>
+                    <li class="option">
+                        <input type="color" value="#7517E8">
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
     <div class="msg-area">
         <div class="msg-display" id="msg-display"></div>
@@ -48,6 +61,11 @@
     canvas.addEventListener("mousemove", draw);
     canvas.addEventListener("mouseup", () => {
         isDrawing = false;
+    });
+
+    let deleteBtn = document.getElementById("delete");
+    deleteBtn.addEventListener("click", () => {
+        ctx.clearRect(0,0,canvas.width, canvas.height);
     });
     
     function createMessage(usr, msg) {
