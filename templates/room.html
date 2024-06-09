@@ -17,6 +17,7 @@
         <canvas></canvas>
         <div class="tools">
             <button id="delete">DEL</button>
+            <button id="undo">UNDO</button>
             <div class="colors">
                 <ul class="options">
                     <li class="option"></li>
@@ -42,10 +43,14 @@
     const canvas = document.querySelector("canvas");
     const ctx = canvas.getContext("2d");
     const colorsBtns = document.querySelectorAll(".colors .option"),
+    deleteBtn = document.getElementById("delete"),
+    undoBtn = document.getElementById("undo"),
     colorPicker = document.querySelector("#color-picker");
-
+    
     let isDrawing = false;
     let selectedColor = "#000";
+    let paths = [],
+    pathIndex = -1;
     window.addEventListener("load", () => {
         canvas.width = canvas.offsetWidth;
         canvas.height = canvas.offsetHeight;
@@ -65,13 +70,27 @@
 
     canvas.addEventListener("mousedown", startDrawing);
     canvas.addEventListener("mousemove", draw);
-    canvas.addEventListener("mouseup", () => {
+    canvas.addEventListener("mouseup", (event) => {
         isDrawing = false;
+        paths.push(ctx.getImageData(0,0, canvas.width, canvas.height));
+        pathIndex+=1;
     });
 
-    let deleteBtn = document.getElementById("delete");
     deleteBtn.addEventListener("click", () => {
         ctx.clearRect(0,0,canvas.width, canvas.height);
+        paths = [];
+        pathIndex = -1;
+    });
+
+    undoBtn.addEventListener("click", () => {
+        if (pathIndex <= 0) {
+            ctx.clearRect(0,0, canvas.width, canvas.height);
+        }
+        else {
+            paths.pop();
+            pathIndex-=1;
+            ctx.putImageData(paths[pathIndex], 0, 0);
+        }
     });
 
     colorsBtns.forEach(btn => {
