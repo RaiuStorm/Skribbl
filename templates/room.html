@@ -23,7 +23,7 @@
                     <li class="option"></li>
                     <li class="option"></li>
                     <li class="option">
-                        <input type="color" value="#7517E8">
+                        <input type="color" value="#7517E8" id="color-picker">
                     </li>
                 </ul>
             </div>
@@ -41,7 +41,11 @@
     var socket = io();
     const canvas = document.querySelector("canvas");
     const ctx = canvas.getContext("2d");
+    const colorsBtns = document.querySelectorAll(".colors .option"),
+    colorPicker = document.querySelector("#color-picker");
+
     let isDrawing = false;
+    let selectedColor = "#000";
     window.addEventListener("load", () => {
         canvas.width = canvas.offsetWidth;
         canvas.height = canvas.offsetHeight;
@@ -50,6 +54,8 @@
         isDrawing = true;
         ctx.beginPath();
         ctx.lineWidth = 2;
+        ctx.strokeStyle = selectedColor;
+        ctx.fillStyle = selectedColor;
     }
     const draw = (e) => {
         if (!isDrawing) return;
@@ -66,6 +72,16 @@
     let deleteBtn = document.getElementById("delete");
     deleteBtn.addEventListener("click", () => {
         ctx.clearRect(0,0,canvas.width, canvas.height);
+    });
+
+    colorsBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+            selectedColor = window.getComputedStyle(btn).getPropertyValue("background-color");
+        });
+    });
+    colorPicker.addEventListener("change", () => {
+        colorPicker.parentElement.style.backgroundColor = colorPicker.value;
+        colorPicker.parentElement.click();
     });
     
     function createMessage(usr, msg) {
@@ -106,7 +122,7 @@
     });
     socket.on("message", (data) => {
         createMessage(data.usr, data.msg);
-        if (typeof data.usrList !== "undefined") {
+        if (typeof data.usrList !== "undefined") { // this can probably be done better with a custom event
             data.usrList.forEach((currentValue) => {
                 createUser(currentValue.user);
             });

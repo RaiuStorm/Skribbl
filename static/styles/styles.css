@@ -102,6 +102,7 @@ canvas {
 }
 .tools {
     display: flex;
+    background-color: whitesmoke;
 }
 .colors .options {
     display: flex;
@@ -111,6 +112,7 @@ canvas {
     width: 20px;
     height: 20px;
     border-radius: 15px;
+    cursor: pointer;
 }
 .colors .option:nth-child(1) {
     background-color: black;
