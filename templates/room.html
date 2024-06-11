@@ -72,24 +72,36 @@
     canvas.addEventListener("mousemove", draw);
     canvas.addEventListener("mouseup", (event) => {
         isDrawing = false;
-        paths.push(ctx.getImageData(0,0, canvas.width, canvas.height));
+        let imgData = ctx.getImageData(0,0, canvas.width, canvas.height);
+        const imgUrl = canvas.toDataURL();
+        paths.push(imgData);
         pathIndex+=1;
+        socket.emit("canvas_update", imgUrl); // {"imgData": imgData, "index": pathIndex} send the canvas data to server.. ERR here, it deletes the room
+        // imgUrl works but not imgData !!!
     });
 
     deleteBtn.addEventListener("click", () => {
         ctx.clearRect(0,0,canvas.width, canvas.height);
         paths = [];
         pathIndex = -1;
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(0,0, canvas.width, canvas.height); // this is so the canvas url is also a blank canvas
+        const imgUrl = canvas.toDataURL(); // doesnt work unless ctx.fillRect with white
+        socket.emit("canvas_update", imgUrl);
     });
 
     undoBtn.addEventListener("click", () => {
         if (pathIndex <= 0) {
             ctx.clearRect(0,0, canvas.width, canvas.height);
+            const imgUrl = canvas.toDataURL();
+            socket.emit("canvas_update", imgUrl);
         }
         else {
             paths.pop();
             pathIndex-=1;
             ctx.putImageData(paths[pathIndex], 0, 0);
+            const imgUrl = canvas.toDataURL();
+            socket.emit("canvas_update", imgUrl);
         }
     });
 
@@ -143,8 +155,15 @@
         createMessage(data.usr, data.msg);
         if (typeof data.usrList !== "undefined") { // this can probably be done better with a custom event
             data.usrList.forEach((currentValue) => {
-                createUser(currentValue.user);
+                createUser(currentValue.user); // PROBLEM this just appends more users, including existing ones
             });
+        }
+    });
+    socket.on("renew", (data) => {
+        const image = new Image();
+        image.src = data;
+        image.onload = () => {
+            ctx.drawImage(image, 0, 0);
         }
     });
 </script>

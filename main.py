@@ -51,6 +51,7 @@ def room():
 def connect(auth):
     user = session.get("name")
     room = session.get("room")
+    print(rooms)
     usr_id = len(rooms[room]["members"])
     session["usr-id"] = usr_id
     join_room(room)
@@ -80,6 +81,11 @@ def send_msg(data):
     room = session.get("room")
     send({"msg":data["msg"], "usr":user}, to=room)
     rooms[room]["messages"].append(data["msg"])
+
+@socketio.on("canvas_update")
+def canvas_update(data):
+    room = session.get("room")
+    emit("renew", data, to=room) # whenever I try to send canvas imgdata the room deletes itself or smth but when I send a string it works perfectly
 
 if __name__ == "__main__":
     socketio.run(app, debug=True)

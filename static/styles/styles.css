@@ -72,10 +72,10 @@ ul {
 }
 .player-area {
     width: 250px;
-    max-height: fit-content;
     background-color: whitesmoke;
 }
 #player-list {
+    height: fit-content;
     overflow-y: scroll;
 }
 #player-list p {
