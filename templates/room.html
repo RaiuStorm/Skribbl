@@ -101,6 +101,11 @@
             pathIndex-=1;
             ctx.putImageData(paths[pathIndex], 0, 0);
             const imgUrl = canvas.toDataURL();
+            const image = new Image();
+            image.src = imgUrl;
+            image.onload = () => {
+            ctx.drawImage(image, 0, 0);
+            }
             socket.emit("canvas_update", imgUrl);
         }
     });

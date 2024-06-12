@@ -51,7 +51,6 @@ def room():
 def connect(auth):
     user = session.get("name")
     room = session.get("room")
-    print(rooms)
     usr_id = len(rooms[room]["members"])
     session["usr-id"] = usr_id
     join_room(room)
