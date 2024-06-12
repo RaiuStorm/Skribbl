@@ -93,6 +93,8 @@
     undoBtn.addEventListener("click", () => {
         if (pathIndex <= 0) {
             ctx.clearRect(0,0, canvas.width, canvas.height);
+            ctx.fillStyle = "#fff";
+            ctx.fillRect(0,0, canvas.width, canvas.height);
             const imgUrl = canvas.toDataURL();
             socket.emit("canvas_update", imgUrl);
         }
@@ -101,6 +103,11 @@
             pathIndex-=1;
             ctx.putImageData(paths[pathIndex], 0, 0);
             const imgUrl = canvas.toDataURL();
+            const image = new Image();
+            image.src = imgUrl;
+            image.onload = () => {
+            ctx.drawImage(image, 0, 0);
+            }
             socket.emit("canvas_update", imgUrl);
         }
     });
